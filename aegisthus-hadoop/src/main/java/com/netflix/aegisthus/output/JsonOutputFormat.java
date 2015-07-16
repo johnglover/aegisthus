@@ -148,7 +148,11 @@ public class JsonOutputFormat extends CustomFileNameFileOutputFormat<BytesWritab
                             columnName = AegisthusKeySortingComparator.legacyColumnNameFormat(columnName);
                         }
                         jsonGenerator.writeString(columnName);
-                        jsonGenerator.writeString(getString(columnValueConverter, ((Column) atom).value()));
+                        if (atom instanceof CounterColumn) {
+                            jsonGenerator.writeString(String.valueOf(((CounterColumn) atom).total()));
+                        } else {
+                            jsonGenerator.writeString(getString(columnValueConverter, ((Column) atom).value()));
+                        }
                         jsonGenerator.writeNumber(((Column) atom).timestamp());
 
                         if (atom instanceof DeletedColumn) {
